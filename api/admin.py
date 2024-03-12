@@ -25,6 +25,7 @@ class UserAdmin(admin.ModelAdmin):
         "email",
     ]
 
+
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
     model=Item
@@ -48,6 +49,7 @@ class ItemAdmin(admin.ModelAdmin):
             return "Без изображения"
         
     get_image.short_description="Изображение"
+
 
 @admin.register(Cart)
 class CatrAdmin(admin.ModelAdmin):

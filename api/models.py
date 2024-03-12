@@ -14,7 +14,7 @@ class User(AbstractUser):
 
 class Item(models.Model):
     name = models.CharField(
-        max_length=32,
+        max_length=70,
         unique=True,
         verbose_name="Название"
     )
