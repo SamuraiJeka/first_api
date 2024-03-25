@@ -59,3 +59,12 @@ class CatrAdmin(admin.ModelAdmin):
         "item",
         "count",
     ]
+
+@admin.register(Favorites)
+class FavoritesAdmin(admin.ModelAdmin):
+    model=Favorites
+    list_display=[
+        "user",
+        "item",
+        "count",
+    ]
