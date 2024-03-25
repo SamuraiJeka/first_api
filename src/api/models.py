@@ -59,3 +59,25 @@ class Cart(models.Model):
     class Meta:
         verbose_name="Корзина"
         verbose_name_plural="Корзины"
+
+
+class Favorites(models.Model):
+    user=models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        unique=False,
+        verbose_name="Пользователь",
+    )
+    item=models.ForeignKey(
+        Item,
+        on_delete=models.CASCADE,
+        unique=False,
+        verbose_name="Товар",
+    )
+    count=models.SmallIntegerField(
+        verbose_name="Количество"
+    )
+
+    class Meta:
+        verbose_name="Избранное"
+        verbose_name_plural="Избранное"
