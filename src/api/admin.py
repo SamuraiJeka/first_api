@@ -7,7 +7,6 @@ from .models import *
 class UserAdmin(admin.ModelAdmin):
     model=User
     list_display=[
-        "username",
         "email",
         "is_staff",
     ]

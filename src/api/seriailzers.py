@@ -18,12 +18,14 @@ class CartItemSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['email', 'password']
 
 
 class CartSerializer(serializers.ModelSerializer):
-    item = CartItemSerializer(many=False)
-
+    
+    user = serializers.SlugRelatedField(slug_field="email", read_only=True)
+    item = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    
     class Meta:
         model = Cart
-        fields = ['item', 'count']
+        fields = ['item', 'count', 'user']

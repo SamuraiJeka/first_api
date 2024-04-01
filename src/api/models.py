@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
 
     def __str__(self):
-        return self.username
+        return self.email
 
     class Meta(AbstractUser.Meta):
         verbose_name = "Пользователь"
@@ -16,7 +16,6 @@ class Item(models.Model):
 
     name = models.CharField(
         max_length=70,
-        unique=True,
         verbose_name="Название"
     )
     imageURL=models.ImageField(
