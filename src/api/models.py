@@ -1,7 +1,39 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
-class User(AbstractUser):
+from api.managers import CustomUserManager
+
+
+class User(AbstractBaseUser, PermissionsMixin):
+
+    email = models.EmailField(
+        verbose_name="Почта",
+        unique=True
+    )
+    number = models.BigIntegerField(
+        verbose_name="Номер телефона",
+        blank=True,
+        null=True
+    )
+    is_staff = models.BooleanField(
+        verbose_name="Админ статус",
+        default=False,
+    )
+    is_active = models.BooleanField(
+        verbose_name="Активность",
+        default=False,
+    )
+    is_superuser = models.BooleanField(
+        verbose_name="Статус суперпользователя",
+        default=False,
+    )
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.email

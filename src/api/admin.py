@@ -14,14 +14,13 @@ class UserAdmin(admin.ModelAdmin):
         "is_staff"
     ]
     fields=[
-        "username",
-        "password",
         "email",
+        "number",
+        "password"
     ]
     readonly_fields=[
-        "username",
-        "password",
         "email",
+        "password"
     ]
 
 
