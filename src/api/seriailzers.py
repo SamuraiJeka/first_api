@@ -25,7 +25,11 @@ class CartSerializer(serializers.ModelSerializer):
     
     user = serializers.SlugRelatedField(slug_field="email", read_only=True)
     item = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    description = serializers.SerializerMethodField()
+
+    def get_description(self, insstance):
+        return insstance.item.description
     
     class Meta:
         model = Cart
-        fields = ['item', 'count', 'user']
+        fields = ['item', 'count', 'description']
