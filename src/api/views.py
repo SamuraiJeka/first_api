@@ -18,9 +18,6 @@ class ItemViewset(*mixins):
 
 
 class UserViewset(APIView):
-
-    def get(self, request, format=None):
-        ...
     
     def post(self, request, format=None):
         serialazer = UserSerializer(data=request.data)
@@ -34,7 +31,9 @@ class UserViewset(APIView):
 class CartViewset(viewsets.ModelViewSet):
     
     queryset = Cart.objects.all()
-    serializer_class = CartSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        return CartSerializer(*args, **kwargs)
 
     def get_queryset(self):
         email = self.request.query_params.get('email')
@@ -42,16 +41,13 @@ class CartViewset(viewsets.ModelViewSet):
     
     @action(detail=False, methods=['post'], url_path='create-cart-post')
     def create_book_post(self, request):
-        serializer = CartSerializer(data=request.data)
+        serializer = CartSerializer(data=(request.data | {"user": request.data['user']}))
+
         if serializer.is_valid():
 
-            user = User.objects.get(email=request.data['user'])
-            item = Item.objects.get(name=request.data['item'])
-            count = request.data.get('count')
+            serializer.save()
 
-            Cart.objects.create(user=user, item=item, count=count)
-
-            return Response(serializer.data, status=201)
-        
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+                
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

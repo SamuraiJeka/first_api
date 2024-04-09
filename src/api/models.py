@@ -83,6 +83,7 @@ class Cart(models.Model):
         Item,
         on_delete=models.CASCADE,
         unique=False,
+        related_name="item",
         verbose_name="Товар",
     )
     count=models.SmallIntegerField(
