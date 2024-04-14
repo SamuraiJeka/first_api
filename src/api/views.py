@@ -6,12 +6,11 @@ from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Item, User, Cart
-from .seriailzers import ItemSerializer, UserSerializer, CartSerializer
+from .seriailzers import ItemSerializer, UserSerializer, CartSerializer, AddCartSerializer
 from .permissioms import IsAdminOrReadOnly
 
-mixins = [viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin]
 
-class ItemViewset(*mixins):
+class ItemViewset(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (IsAdminOrReadOnly, )
@@ -28,7 +27,7 @@ class UserViewset(APIView):
             return Response(serialazer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CartViewset(viewsets.ModelViewSet):
+class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
     
     queryset = Cart.objects.all()
 
@@ -38,16 +37,16 @@ class CartViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         email = self.request.query_params.get('email')
         return Cart.objects.filter(user__email=email)
-    
-    @action(detail=False, methods=['post'], url_path='create-cart-post')
-    def create_book_post(self, request):
-        serializer = CartSerializer(data=(request.data | {"user": request.data['user']}))
+     
 
+    def create(self, request):
+        pk = User.objects.get(email=self.request.query_params.get('email')).pk
+        print(self.request.query_params.get('email'))
+
+        serializer = AddCartSerializer(data=(request.data | {"user": pk}))
         if serializer.is_valid():
 
             serializer.save()
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
