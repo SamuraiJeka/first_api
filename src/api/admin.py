@@ -29,6 +29,7 @@ class ItemAdmin(admin.ModelAdmin):
     model=Item
     list_display=[
         "name",
+        "id",
         "price",
         "imageURL"
     ]

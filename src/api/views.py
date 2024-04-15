@@ -27,7 +27,7 @@ class UserViewset(APIView):
             return Response(serialazer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin):
+class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     
     queryset = Cart.objects.all()
 
@@ -40,13 +40,30 @@ class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateM
      
 
     def create(self, request):
-        pk = User.objects.get(email=self.request.query_params.get('email')).pk
-        print(self.request.query_params.get('email'))
+        email = User.objects.get(email=self.request.query_params.get('email'))
 
-        serializer = AddCartSerializer(data=(request.data | {"user": pk}))
+        serializer = AddCartSerializer(data=(request.data | {"user": email.pk}))
         if serializer.is_valid():
+
+            item = Item.objects.get(pk=request.data.get('item'))
+
+            try: 
+                Cart.objects.get(user=email, item=item) in Cart.objects.filter(user=email.pk)
+
+                cart = Cart.objects.get(user=email, item=item)
+                cart.count += request.data.get('count')
+                cart.save()
+
+                return Response(status=status.HTTP_200_OK)
+            except: pass
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
+"""
+{
+    "count": int,
+    "item": int
+}
+"""
