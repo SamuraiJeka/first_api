@@ -1,9 +1,6 @@
-from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework import viewsets, generics, mixins, status
-from rest_framework.decorators import action
+from rest_framework import viewsets, mixins, status
 from rest_framework.views import APIView
-from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Item, User, Cart
 from .seriailzers import ItemSerializer, UserSerializer, CartSerializer, AddCartSerializer
@@ -27,8 +24,7 @@ class UserViewset(APIView):
             return Response(serialazer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
-    
+class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):    
     queryset = Cart.objects.all()
 
     def get_serializer(self, *args, **kwargs):
@@ -41,21 +37,20 @@ class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
 
     def create(self, request):
         email = User.objects.get(email=self.request.query_params.get('email'))
-
         serializer = AddCartSerializer(data=(request.data | {"user": email.pk}))
+        
         if serializer.is_valid():
 
             item = Item.objects.get(pk=request.data.get('item'))
 
             try: 
                 Cart.objects.get(user=email, item=item) in Cart.objects.filter(user=email.pk)
-
                 cart = Cart.objects.get(user=email, item=item)
                 cart.count += request.data.get('count')
                 cart.save()
-
                 return Response(status=status.HTTP_200_OK)
-            except: pass
+            except: 
+                pass
 
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

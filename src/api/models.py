@@ -7,7 +7,6 @@ from api.managers import CustomUserManager
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-
     email = models.EmailField(
         verbose_name="Почта",
         unique=True
@@ -45,7 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Item(models.Model):
-
     name = models.CharField(
         max_length=70,
         verbose_name="Название"
@@ -72,7 +70,6 @@ class Item(models.Model):
 
 
 class Cart(models.Model):
-
     user=models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -96,7 +93,6 @@ class Cart(models.Model):
 
 
 class Favorites(models.Model):
-
     user=models.ForeignKey(
         User,
         on_delete=models.CASCADE,
