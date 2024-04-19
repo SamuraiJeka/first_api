@@ -7,7 +7,7 @@ from .seriailzers import ItemSerializer, UserSerializer, CartSerializer, AddCart
 from .permissioms import IsAdminOrReadOnly
 
 
-class ItemViewset(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin):
+class ItemViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (IsAdminOrReadOnly, )
@@ -91,3 +91,8 @@ class FavoritesViewset(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.D
             return Response(serializer.data, status=status.HTTP_201_CREATED)
                 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+"""
+{
+"item": int
+}
+"""
