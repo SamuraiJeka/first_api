@@ -37,6 +37,15 @@ class AddCartSerializer(serializers.ModelSerializer):
 
 
 class FavoritesSerializer(serializers.ModelSerializer):
+    item = ItemSerializer(read_only=True)
+    description = serializers.SlugRelatedField(slug_field='description', read_only=True)
+
+    class Meta:
+        model = Cart
+        fields = ['item', 'description']
+
+
+class AddFavoritesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Favorites
         fields = '__all__'

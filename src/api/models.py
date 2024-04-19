@@ -105,9 +105,6 @@ class Favorites(models.Model):
         unique=False,
         verbose_name="Товар",
     )
-    count=models.SmallIntegerField(
-        verbose_name="Количество"
-    )
 
     class Meta:
         verbose_name="Избранное"

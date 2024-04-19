@@ -65,5 +65,4 @@ class FavoritesAdmin(admin.ModelAdmin):
     list_display=[
         "user",
         "item",
-        "count",
     ]
