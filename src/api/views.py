@@ -3,7 +3,7 @@ from rest_framework import viewsets, mixins, status
 from rest_framework.views import APIView
 
 from .models import Item, User, Cart, Favorites
-from .seriailzers import ItemSerializer, UserSerializer, CartSerializer, AddCartSerializer, FavoritesSerializer, AddFavoritesSerializer
+from .seriailzers import ItemSerializer, CartSerializer, AddCartSerializer, FavoritesSerializer, AddFavoritesSerializer
 from .permissioms import IsAdminOrReadOnly
 
 
@@ -11,17 +11,6 @@ class ItemViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     permission_classes = (IsAdminOrReadOnly, )
-
-
-class UserViewset(APIView):
-    
-    def post(self, request, format=None):
-        serialazer = UserSerializer(data=request.data)
-        if serialazer.is_valid():
-            serialazer.save()
-            return Response(serialazer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serialazer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):    

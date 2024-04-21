@@ -1,3 +1,5 @@
+from djoser.serializers import UserCreateSerializer
+
 from rest_framework import serializers
 from .models import User, Item, Cart, Favorites
 
@@ -13,12 +15,14 @@ class CartItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['name', 'imageURL', 'price']
+        
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserCastomCreateSerializer(UserCreateSerializer):
     class Meta:
         model = User
-        fields = ['email', 'password', 'id']
+        fields = ['email', 'password', 'number']
+        exclude_fields = ['password',]
 
 
 class CartSerializer(serializers.ModelSerializer):
