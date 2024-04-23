@@ -53,7 +53,7 @@ class CartViewset(viewsets.GenericViewSet, mixins.ListModelMixin):
 """
 
 
-class FavoritesViewset(viewsets.GenericViewSet,  mixins.ListModelMixin, mixins.DestroyModelMixin):
+class FavoritesViewset(viewsets.GenericViewSet,  mixins.ListModelMixin):
     queryset = Favorites.objects.all()
     serializer_class = FavoritesSerializer
 
